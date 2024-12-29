@@ -28,7 +28,7 @@ export const TaskProvider = ({ children }) => {
 
   const createTask = async (title, description) => {
     try {
-      const response = await fetch("http://localhost:5000/api/tasks", {
+      const response = await fetch("http://localhost:8000/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const TaskProvider = ({ children }) => {
   };
   const toggleTask = async (id, completed) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      const response = await fetch(`http://localhost:8000/api/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -57,9 +57,9 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  const deteleTask = async (id) => {
+  const deleteTask = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      await fetch(`http://localhost:8000/api/tasks/${id}`, {
         method: "DELETE",
       });
       setTasks(tasks.filter((task) => task._id !== id));
@@ -69,7 +69,7 @@ export const TaskProvider = ({ children }) => {
   };
   return (
     <TaskContext.Provider
-      value={{ tasks, loading, createTask, toggleTask, deteleTask }}
+      value={{ tasks, loading, createTask, toggleTask, deleteTask }}
     >
       {children}
     </TaskContext.Provider>
