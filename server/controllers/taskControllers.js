@@ -33,7 +33,7 @@ export const getTasks = async (req, res) => {
   }
 };
 
-export const getTaks = async (req, res) => {
+export const getTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
 
