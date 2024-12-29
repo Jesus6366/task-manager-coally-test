@@ -67,9 +67,25 @@ export const TaskProvider = ({ children }) => {
       console.error("Error deleting task:", error);
     }
   };
+
+  const updateTask = async (id, title, description) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description }),
+      });
+      const updatedTask = await response.json();
+      setTasks(tasks.map((task) => (task._id === id ? updatedTask : task)));
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
   return (
     <TaskContext.Provider
-      value={{ tasks, loading, createTask, toggleTask, deleteTask }}
+      value={{ tasks, loading, createTask, toggleTask, deleteTask, updateTask }}
     >
       {children}
     </TaskContext.Provider>

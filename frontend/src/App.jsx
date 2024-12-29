@@ -9,19 +9,30 @@ import {
   Checkbox,
   Text,
   Spinner,
+  Heading,
 } from "@chakra-ui/react";
 
 const App = () => {
-  const { tasks, loading, createTask, toggleTask, deleteTask } =
+  const { tasks, loading, createTask, toggleTask, deleteTask, updateTask } =
     useContext(TaskContext);
 
   const [newTask, setNewTask] = useState("");
   const [description, setDescription] = useState("");
   const [filter, setFilter] = useState("all");
+  const [editingTask, setEditingTask] = useState(null); // State for editing task
 
   const handleAddTask = () => {
     if (newTask.trim()) {
       createTask(newTask, description);
+      setNewTask("");
+      setDescription("");
+    }
+  };
+
+  const handleUpdateTask = () => {
+    if (editingTask && newTask.trim()) {
+      updateTask(editingTask._id, newTask, description);
+      setEditingTask(null); // Clear editing task after updating
       setNewTask("");
       setDescription("");
     }
@@ -52,12 +63,13 @@ const App = () => {
       p={5}
       display="flex"
       flexDirection="column"
-      alignItems="center"
+      // alignItems="center"
       height="100vh"
       justifyContent="center"
     >
+      <Heading mb={5}>Task Management</Heading>
       <Input
-        placeholder="New Task"
+        placeholder={editingTask ? "Edit Task" : "New Task"}
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
       />
@@ -67,9 +79,15 @@ const App = () => {
         onChange={(e) => setDescription(e.target.value)}
         mt={2}
       />
-      <Button onClick={handleAddTask} mt={2}>
-        Add Task
-      </Button>
+      {editingTask ? (
+        <Button onClick={handleUpdateTask} mt={2}>
+          Update Task
+        </Button>
+      ) : (
+        <Button onClick={handleAddTask} mt={2}>
+          Add Task
+        </Button>
+      )}
       <Box mt={5}>
         <Button onClick={() => setFilter("all")}>All</Button>
         <Button onClick={() => setFilter("completed")} ml={2}>
@@ -99,13 +117,27 @@ const App = () => {
                 {task.description}
               </Text>
             </Box>
-            <Button
-              size="sm"
-              colorScheme="red"
-              onClick={() => deleteTask(task._id)}
-            >
-              Delete
-            </Button>
+            <Box>
+              <Button
+                size="sm"
+                colorScheme="blue"
+                onClick={() => {
+                  setEditingTask(task); // Set task for editing
+                  setNewTask(task.title);
+                  setDescription(task.description);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                size="sm"
+                colorScheme="red"
+                onClick={() => deleteTask(task._id)}
+                ml={2}
+              >
+                Delete
+              </Button>
+            </Box>
           </ListItem>
         ))}
       </List>
