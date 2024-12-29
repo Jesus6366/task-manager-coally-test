@@ -35,6 +35,6 @@ const connectDB = async () => {
 connectDB();
 
 // Port Binding
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
